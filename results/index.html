@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Match Centre · Three Stars FC</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo/3stars-icon_stars-only.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e8edf3; --card: #f6f8fb; --white: #fff; --navy: #14284b; --deep: #0a1730;
+      --sky: #5bc0e8; --sky-ink: #1f86b8; --gold: #f8dc12; --ink: #0d1526; --muted: #5a6578;
+      --line: #d3dbe5; --win: #2bb673; --draw: #e9b500; --loss: #d6455d;
+      --f-sans: "Plus Jakarta Sans", system-ui, sans-serif; --f-cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--f-sans); -webkit-font-smoothing: antialiased; padding-bottom: 110px; }
+    button, input, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--sky-ink); }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 8px; }
+
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+    .top { background: var(--deep); color: #fff; border-radius: 0 0 24px 24px; padding: 18px 0 26px; margin-bottom: 22px; }
+    .top__row { display: flex; align-items: center; gap: 14px; }
+    .top__row img { height: 48px; width: auto; }
+    .top h1 { margin: 0; font: 800 26px/1 var(--f-cond); letter-spacing: 0.01em; text-transform: uppercase; }
+    .top small { display: block; color: rgba(255,255,255,.6); font-size: 12.5px; margin-top: 3px; }
+    .top__links { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    @media (max-width: 560px) {
+      .top__row { flex-wrap: wrap; }
+      .top__links { margin-left: 0; width: 100%; justify-content: flex-start; }
+      .top__row img { height: 40px; }
+    }
+    .chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: #fff; text-decoration: none; }
+    .chip i { width: 8px; height: 8px; border-radius: 50%; background: #8691a3; }
+    .chip.on i { background: var(--win); box-shadow: 0 0 0 3px rgba(43,182,115,.25); }
+
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: 22px; padding: 22px; margin-bottom: 16px; }
+    .card h2 { margin: 0; font-size: 21px; letter-spacing: -0.02em; }
+    .card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+    .hint { color: var(--muted); font-size: 13.5px; margin: 4px 0 0; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-weight: 600; font-size: 14px; text-decoration: none; color: var(--ink); }
+    .btn:hover { border-color: #b4c2d3; }
+    .btn--dark { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .btn--dark:hover { background: var(--deep); }
+    .btn--gold { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 700; }
+    .btn--gold:hover { background: #fff27a; }
+    .btn--sky { background: var(--sky); border-color: var(--sky); color: var(--ink); }
+    .btn--sm { min-height: 36px; padding: 0 13px; font-size: 13px; }
+    .btn--danger { color: var(--loss); }
+    .btn:disabled { opacity: .5; cursor: default; }
+
+    /* connect */
+    .steps { margin: 14px 0 18px; padding-left: 20px; color: #34405a; }
+    .steps li { margin-bottom: 6px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .row > input { flex: 1 1 240px; }
+
+    /* list */
+    .mlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .m { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 10px; border-radius: 16px; background: var(--card); border: 1px solid transparent; }
+    .m.is-due { border-color: var(--gold); background: #fffbe0; }
+    .m__date { background: var(--white); border-radius: 12px; text-align: center; padding: 8px 4px; }
+    .m__date b { display: block; font: 800 26px/1 var(--f-cond); color: var(--navy); }
+    .m__date span { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+    .m__title { font-weight: 700; letter-spacing: -0.015em; }
+    .m__title .sc { font: 800 19px/1 var(--f-cond); background: var(--navy); color: #fff; padding: 3px 8px; border-radius: 7px; margin: 0 4px; white-space: nowrap; }
+    .m__title .us { color: var(--sky-ink); }
+    .m__sub { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+    .m__acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 3px 7px; border-radius: 99px; margin-right: 6px; vertical-align: 2px; background: var(--white); border: 1px solid var(--line); }
+    .badge--win { background: var(--win); border-color: var(--win); color: #fff; }
+    .badge--draw { background: var(--draw); border-color: var(--draw); }
+    .badge--loss { background: var(--loss); border-color: var(--loss); color: #fff; }
+    .badge--due { background: var(--gold); border-color: var(--gold); }
+    .badge--new { background: var(--sky); border-color: var(--sky); }
+    .empty { color: var(--muted); padding: 18px; text-align: center; border: 1.5px dashed var(--line); border-radius: 16px; }
+    @media (max-width: 640px) {
+      .m { grid-template-columns: 56px 1fr; }
+      .m__acts { grid-column: 1 / -1; justify-content: stretch; }
+      .m__acts .btn { flex: 1; }
+    }
+
+    /* publish bar */
+    .bar { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 20; max-width: 896px; margin: 0 auto; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 20px; border-radius: 999px; background: var(--deep); color: #fff; box-shadow: 0 20px 40px -18px rgba(10,23,48,.6); }
+    .bar__msg { flex: 1; font-size: 13.5px; line-height: 1.35; }
+    .bar__msg b { color: var(--gold); }
+    .bar .btn { border-color: rgba(255,255,255,.2); background: transparent; color: #fff; }
+    .bar .btn--gold { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+    /* editor */
+    dialog { border: 0; padding: 0; border-radius: 24px; width: min(640px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); background: var(--white); color: var(--ink); box-shadow: 0 30px 80px -20px rgba(10,23,48,.55); }
+    dialog::backdrop { background: rgba(10, 23, 48, .55); backdrop-filter: blur(4px); }
+    .ed { display: flex; flex-direction: column; max-height: calc(100dvh - 24px); }
+    .ed__head { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px 6px; }
+    .ed__head h3 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+    .ed__x { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--white); font-size: 22px; line-height: 1; }
+    .ed__body { overflow: auto; padding: 10px 22px 8px; display: grid; gap: 16px; }
+    .ed__foot { display: flex; gap: 10px; justify-content: flex-end; padding: 14px 22px 20px; border-top: 1px solid var(--line); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 520px) { .grid2 { grid-template-columns: 1fr; } dialog { border-radius: 20px; } }
+    label.f { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: #34405a; }
+    label.f small { font-weight: 500; color: var(--muted); }
+    input[type=text], input[type=date], input[type=time], input[type=number], input[type=password], select {
+      width: 100%; min-height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); font-size: 15px;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--sky-ink); background: var(--white); box-shadow: 0 0 0 3px rgba(91,192,232,.3); }
+    .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); }
+    .seg label { position: relative; }
+    .seg input { position: absolute; opacity: 0; inset: 0; }
+    .seg span { display: block; padding: 9px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; }
+    .seg input:checked + span { background: var(--navy); color: #fff; }
+    .seg input:focus-visible + span { outline: 3px solid var(--gold); }
+    .check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #34405a; }
+    .check input { width: 18px; height: 18px; accent-color: var(--navy); }
+    .score { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; padding: 14px; border-radius: 16px; background: var(--card); }
+    .score input { text-align: center; font: 800 30px/1 var(--f-cond); min-height: 58px; background: var(--white); }
+    .score .dash { font: 800 28px/58px var(--f-cond); color: var(--muted); }
+    .score legend { grid-column: 1 / -1; }
+    .poster { display: flex; gap: 14px; align-items: center; }
+    .poster__img { width: 84px; height: 104px; border-radius: 12px; background: var(--card) center / cover no-repeat; border: 1px solid var(--line); flex-shrink: 0; display: grid; place-items: center; color: var(--muted); font-size: 11px; text-align: center; }
+    .poster__acts { display: grid; gap: 8px; justify-items: start; }
+    .err { color: var(--loss); font-size: 13px; font-weight: 600; }
+
+    .toast { position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%); z-index: 50; background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 14px; font-size: 14px; max-width: calc(100vw - 32px); box-shadow: 0 16px 30px -12px rgba(0,0,0,.5); }
+    .toast.bad { background: var(--loss); }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top__row">
+      <img src="../assets/logo/3stars-logo_redrawn_white-text.svg" alt="">
+      <div>
+        <h1>Match centre</h1>
+        <small>Results and fixtures for threestarsfc</small>
+      </div>
+      <div class="top__links">
+        <span class="chip" id="conn"><i></i><span>Not connected</span></span>
+        <a class="chip" href="../matches.html" target="_blank" rel="noopener">View site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- connect -->
+    <section class="card" id="connect" hidden>
+      <h2>Connect to publish</h2>
+      <p class="hint">Changes are saved straight to the website&rsquo;s GitHub repository. You need a GitHub access token to publish. You only have to do this once on each phone or computer.</p>
+      <ol class="steps">
+        <li>Sign in to GitHub with an account that can edit <b>starsfct-commits/threestarsfc</b>.</li>
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">New fine-grained token</a>.</li>
+        <li>Name it <i>Match centre</i> and pick an expiry date. Under <b>Repository access</b>, choose <b>Only select repositories</b>, then <b>threestarsfc</b>.</li>
+        <li>Under <b>Permissions &rarr; Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>.</li>
+        <li>Click <b>Generate token</b>, copy it and paste it below.</li>
+      </ol>
+      <form class="row" id="connectForm">
+        <input type="password" id="token" placeholder="github_pat_…" autocomplete="off" spellcheck="false" aria-label="GitHub token" required>
+        <button class="btn btn--dark" type="submit">Connect</button>
+      </form>
+      <p class="hint">The token is kept only in this browser. Anyone who has it can change the website, so don&rsquo;t share it. <button class="btn btn--sm" type="button" id="offline" style="margin-left:4px">Edit without publishing</button></p>
+    </section>
+
+    <!-- fixtures -->
+    <section class="card" id="fixturesCard" hidden>
+      <div class="card__head">
+        <div>
+          <h2>Fixtures</h2>
+          <p class="hint">Upcoming games, and past ones still waiting for a score.</p>
+        </div>
+        <button class="btn btn--dark" type="button" data-add="fixture">+ Add fixture</button>
+      </div>
+      <ol class="mlist" id="fixtures"></ol>
+    </section>
+
+    <!-- results -->
+    <section class="card" id="resultsCard" hidden>
+      <div class="card__head">
+        <div>
+          <h2>Results</h2>
+          <p class="hint">The newest result shows in the site header and at the top of the homepage.</p>
+        </div>
+        <button class="btn" type="button" data-add="result">+ Add result</button>
+      </div>
+      <ol class="mlist" id="results"></ol>
+    </section>
+
+    <p class="hint" id="foot" hidden style="text-align:center">
+      <button class="btn btn--sm" type="button" id="download">Download matches.json</button>
+      <button class="btn btn--sm" type="button" id="reload">Reload from GitHub</button>
+      <button class="btn btn--sm btn--danger" type="button" id="logout">Forget token on this device</button>
+    </p>
+  </main>
+
+  <div class="bar" id="bar" hidden>
+    <div class="bar__msg" id="barMsg"></div>
+    <button class="btn btn--sm" type="button" id="discard">Undo all</button>
+    <button class="btn btn--gold" type="button" id="publish">Publish</button>
+  </div>
+
+  <!-- editor -->
+  <dialog id="editor" aria-labelledby="edTitle">
+    <form class="ed" id="edForm" method="dialog" novalidate>
+      <div class="ed__head">
+        <h3 id="edTitle">Add fixture</h3>
+        <button class="ed__x" type="button" data-close aria-label="Close">&times;</button>
+      </div>
+      <div class="ed__body">
+        <label class="f">Opponent
+          <input type="text" name="opponent" list="opponents" required autocomplete="off" placeholder="e.g. Ashdown United">
+        </label>
+        <div class="grid2">
+          <div class="f" style="display:grid;gap:6px;font-size:13px;font-weight:600;color:#34405a">Where
+            <div class="seg" role="radiogroup" aria-label="Home or away">
+              <label><input type="radio" name="venue" value="home" checked><span>Home</span></label>
+              <label><input type="radio" name="venue" value="away"><span>Away</span></label>
+              <label><input type="radio" name="venue" value="neutral"><span>Neutral</span></label>
+            </div>
+          </div>
+          <label class="f">Competition
+            <input type="text" name="comp" list="comps" value="League" autocomplete="off">
+          </label>
+        </div>
+        <div class="grid2">
+          <label class="f">Date
+            <input type="date" name="date">
+          </label>
+          <label class="f">Kick-off <small>(optional)</small>
+            <input type="time" name="ko">
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" name="tbc"> Date not confirmed yet</label>
+        <label class="f" data-season hidden>Season
+          <input type="number" name="season" min="2000" max="2100" inputmode="numeric">
+        </label>
+        <label class="f">Ground <small>(optional)</small>
+          <input type="text" name="ground" list="grounds" autocomplete="off" placeholder="e.g. Imbali Unit 1, Endishini">
+        </label>
+
+        <fieldset class="score" style="border:0;margin:0">
+          <legend class="f" style="padding:0 0 4px">Final score <small>(leave empty until the game is played)</small></legend>
+          <label class="f">Three Stars<input type="number" name="us" min="0" max="99" inputmode="numeric"></label>
+          <span class="dash">&ndash;</span>
+          <label class="f"><span data-opp-label>Opponent</span><input type="number" name="them" min="0" max="99" inputmode="numeric"></label>
+        </fieldset>
+        <label class="f">Goal scorers <small>(optional, e.g. Phila, Khule (2))</small>
+          <input type="text" name="scorers" autocomplete="off">
+        </label>
+
+        <div class="f">Poster
+          <div class="poster">
+            <div class="poster__img" id="posterImg">No poster</div>
+            <div class="poster__acts">
+              <label class="btn btn--sm" style="cursor:pointer">Choose image<input type="file" accept="image/*" id="posterFile" hidden></label>
+              <button class="btn btn--sm btn--danger" type="button" id="posterRemove">Remove</button>
+              <small style="font-weight:500;color:var(--muted)">JPG or PNG. Large photos are resized automatically.</small>
+            </div>
+          </div>
+        </div>
+        <p class="err" id="edErr" hidden></p>
+      </div>
+      <div class="ed__foot">
+        <button class="btn" type="button" data-close>Cancel</button>
+        <button class="btn btn--dark" type="submit" id="edSave">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <datalist id="opponents"></datalist>
+  <datalist id="grounds"></datalist>
+  <datalist id="comps"><option value="League"><option value="Cup"><option value="Friendly"><option value="Tournament"></datalist>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var REPO = "starsfct-commits/threestarsfc";
+    var BRANCH = "main";
+    var FILE = "data/matches.json";
+    var API = "https://api.github.com/repos/" + REPO + "/contents/";
+    var HOME_GROUND = "Imbali Unit 1, Endishini";
+    var TOKEN_KEY = "tsfc-match-centre-token";
+    var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var $ = function (s, c) { return (c || document).querySelector(s); };
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+    var isNum = function (v) { return typeof v === "number" && isFinite(v); };
+
+    var store = {
+      get: function () { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } },
+      set: function (v) { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+    };
+
+    var token = store.get();
+    var mode = "none";            // "github" | "offline"
+    var sha = null;               // sha of data/matches.json on GitHub
+    var saved = null;             // JSON string of the last loaded / published data
+    var data = { matches: [] };
+    var changes = [];             // human-readable change log for the commit message
+    var posters = {};             // pending uploads: path -> { b64, url }
+    var editing = null;           // match being edited (null = new)
+
+    /* ---------- helpers ---------- */
+    function toast(msg, bad, ms) {
+      var t = document.createElement("div");
+      t.className = "toast" + (bad ? " bad" : "");
+      t.setAttribute("role", "status");
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(function () { t.remove(); }, ms || 4200);
+    }
+    function b64FromBytes(bytes) {
+      var bin = "";
+      for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      return btoa(bin);
+    }
+    function b64encUtf8(str) { return b64FromBytes(new TextEncoder().encode(str)); }
+    function b64decUtf8(b64) {
+      var bin = atob(b64.replace(/\s/g, ""));
+      var bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+    function slug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "match"; }
+    function parseDate(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+    function today() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+    function sortKey(m) { return m.date || (m.season + "-12-31"); }
+    function isResult(m) { return isNum(m.us) && isNum(m.them); }
+    function isDue(m) {
+      if (isResult(m)) return false;
+      var d = parseDate(m.date);
+      return d ? d < today() : String(m.season) < String(today().getFullYear());
+    }
+    function teams(m) {
+      var h = m.venue === "home";
+      return { home: h ? "Three Stars" : m.opponent, away: h ? m.opponent : "Three Stars", hs: h ? m.us : m.them, as: h ? m.them : m.us, usHome: h };
+    }
+    function label(m) {
+      var t = teams(m);
+      return isResult(m) ? t.home + " " + t.hs + "–" + t.as + " " + t.away : t.home + " v " + t.away;
+    }
+    function json() { return JSON.stringify(data, null, 2) + "\n"; }
+    function dirty() { return saved !== null && (json() !== saved || Object.keys(posters).length > 0); }
+    function asset(path) { return /^(https?:|data:|blob:)/.test(path) ? path : "../" + path; }
+
+    function gh(path, opts) {
+      opts = opts || {};
+      return fetch(API + path + (opts.method ? "" : "?ref=" + BRANCH), {
+        method: opts.method || "GET",
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + token, "X-GitHub-Api-Version": "2022-11-28" },
+        body: opts.body ? JSON.stringify(opts.body) : undefined
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (body) {
+          if (!r.ok) { var e = new Error(body.message || ("GitHub said " + r.status)); e.status = r.status; throw e; }
+          return body;
+        });
+      });
+    }
+    function explain(e) {
+      if (e.status === 401) return "GitHub didn't accept the token. It may have expired. Forget it and connect again.";
+      if (e.status === 403 || e.status === 404) return "This token can't edit threestarsfc. Check it has Contents: Read and write on that repository.";
+      if (e.status === 409) return "Someone else published in the meantime. Reload from GitHub, then make your change again.";
+      return e.message || "Something went wrong.";
+    }
+
+    /* ---------- load ---------- */
+    function useData(text, newSha) {
+      data = JSON.parse(text);
+      if (!Array.isArray(data.matches)) data.matches = [];
+      sha = newSha || null;
+      saved = json();
+      changes = []; posters = {};
+      render();
+    }
+    function loadPublic() {
+      return fetch("../" + FILE, { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error("Couldn't load " + FILE + " (" + r.status + ")");
+        return r.text();
+      });
+    }
+    function loadGitHub() {
+      return gh(FILE).then(function (f) {
+        useData(b64decUtf8(f.content), f.sha);
+      }).catch(function (e) {
+        if (e.status === 404 && /not found/i.test(e.message)) {
+          // Token works but the file isn't on GitHub yet: start from the copy on this server.
+          return gh("").then(function () { return loadPublic(); }).then(function (t) { useData(t, null); });
+        }
+        throw e;
+      });
+    }
+    function start() {
+      if (token) {
+        mode = "github";
+        setConn("Loading…", false);
+        loadGitHub().then(function () {
+          setConn("Connected to GitHub", true);
+          show(true);
+        }).catch(function (e) {
+          setConn("Not connected", false);
+          toast(explain(e), true, 7000);
+          show(false);
+        });
+      } else {
+        show(false);
+      }
+    }
+    function setConn(text, on) {
+      var c = $("#conn");
+      c.classList.toggle("on", on);
+      c.lastElementChild.textContent = text;
+    }
+    function show(ready) {
+      $("#connect").hidden = ready;
+      $("#fixturesCard").hidden = !ready;
+      $("#resultsCard").hidden = !ready;
+      $("#foot").hidden = !ready;
+      $("#reload").hidden = mode !== "github";
+      $("#logout").hidden = !token;
+      updateBar();
+    }
+
+    $("#connectForm").addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      token = $("#token").value.trim();
+      if (!token) return;
+      store.set(token);
+      $("#token").value = "";
+      start();
+    });
+    $("#offline").addEventListener("click", function () {
+      mode = "offline";
+      setConn("Offline draft", false);
+      loadPublic().then(function (t) { useData(t, null); show(true); toast("Editing without publishing. Use Download when you're done."); })
+        .catch(function (e) { toast(e.message, true); });
+    });
+    $("#logout").addEventListener("click", function () {
+      if (dirty() && !confirm("You have unpublished changes. Forget the token anyway?")) return;
+      store.set(""); token = ""; mode = "none"; saved = null;
+      setConn("Not connected", false);
+      show(false);
+    });
+    $("#reload").addEventListener("click", function () {
+      if (dirty() && !confirm("Throw away your unpublished changes and reload?")) return;
+      loadGitHub().then(function () { toast("Loaded the latest version."); }).catch(function (e) { toast(explain(e), true); });
+    });
+    $("#download").addEventListener("click", function () {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([json()], { type: "application/json" }));
+      a.download = "matches.json";
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      if (Object.keys(posters).length) toast("Note: new posters aren't in the download. They are only saved when you publish.", false, 6000);
+    });
+
+    /* ---------- render ---------- */
+    function dateBox(m) {
+      var d = parseDate(m.date);
+      return d
+        ? '<div class="m__date"><b>' + d.getDate() + "</b><span>" + MONTHS[d.getMonth()] + " " + String(d.getFullYear()).slice(2) + "</span></div>"
+        : '<div class="m__date"><b style="font-size:19px">' + esc(m.season) + "</b><span>Date tbc</span></div>";
+    }
+    function row(m) {
+      var t = teams(m);
+      var res = isResult(m);
+      var due = isDue(m);
+      var name = function (n, us) { return us ? '<span class="us">' + esc(n) + "</span>" : esc(n); };
+      var badge = res
+        ? (m.us > m.them ? '<span class="badge badge--win">Won</span>' : m.us < m.them ? '<span class="badge badge--loss">Lost</span>' : '<span class="badge badge--draw">Drew</span>')
+        : due ? '<span class="badge badge--due">Needs score</span>' : '<span class="badge badge--new">Upcoming</span>';
+      var mid = res ? '<span class="sc">' + t.hs + "–" + t.as + "</span>" : " v ";
+      var sub = [m.comp || "League", m.venue === "home" ? "Home" : m.venue === "neutral" ? "Neutral" : "Away", m.ground, m.ko, res && m.scorers ? "Goals: " + m.scorers : "", m.poster ? "Poster ✓" : ""].filter(Boolean).map(esc).join(" · ");
+      return '<li class="m' + (due ? " is-due" : "") + '" data-id="' + esc(m.id) + '">' + dateBox(m) +
+        '<div><div class="m__title">' + badge + name(t.home, t.usHome) + mid + name(t.away, !t.usHome) + '</div><div class="m__sub">' + sub + "</div></div>" +
+        '<div class="m__acts">' +
+        (res ? "" : '<button class="btn btn--sm ' + (due ? "btn--gold" : "btn--sky") + '" type="button" data-act="score">Add score</button>') +
+        '<button class="btn btn--sm" type="button" data-act="edit">Edit</button>' +
+        '<button class="btn btn--sm btn--danger" type="button" data-act="del" aria-label="Delete ' + esc(label(m)) + '">Delete</button>' +
+        "</div></li>";
+    }
+    function render() {
+      var ms = data.matches.slice().sort(function (a, b) { return sortKey(a) < sortKey(b) ? -1 : sortKey(a) > sortKey(b) ? 1 : 0; });
+      var fx = ms.filter(function (m) { return !isResult(m); });
+      var rs = ms.filter(isResult).reverse();
+      $("#fixtures").innerHTML = fx.length ? fx.map(row).join("") : '<li class="empty">No fixtures yet. Add the next game when it&rsquo;s confirmed.</li>';
+      $("#results").innerHTML = rs.length ? rs.map(row).join("") : '<li class="empty">No results yet.</li>';
+      var opp = {}, grd = {};
+      data.matches.forEach(function (m) { if (m.opponent) opp[m.opponent] = 1; if (m.ground) grd[m.ground] = 1; });
+      grd[HOME_GROUND] = 1;
+      $("#opponents").innerHTML = Object.keys(opp).sort().map(function (o) { return '<option value="' + esc(o) + '">'; }).join("");
+      $("#grounds").innerHTML = Object.keys(grd).sort().map(function (o) { return '<option value="' + esc(o) + '">'; }).join("");
+      updateBar();
+    }
+    function updateBar() {
+      var d = dirty();
+      $("#bar").hidden = !d;
+      if (!d) return;
+      var n = changes.length || 1;
+      $("#barMsg").innerHTML = "<b>" + n + " unpublished change" + (n === 1 ? "" : "s") + "</b><br>" + esc(changes[changes.length - 1] || "Edited");
+      $("#publish").textContent = mode === "github" ? "Publish" : "Download";
+    }
+
+    function onListClick(ev) {
+      var b = ev.target.closest("button[data-act]");
+      if (!b) return;
+      var id = b.closest("[data-id]").getAttribute("data-id");
+      var m = data.matches.filter(function (x) { return x.id === id; })[0];
+      if (!m) return;
+      var act = b.getAttribute("data-act");
+      if (act === "del") {
+        if (!confirm("Delete " + label(m) + "?")) return;
+        data.matches = data.matches.filter(function (x) { return x !== m; });
+        if (posters[m.poster]) delete posters[m.poster];
+        changes.push("Removed " + label(m));
+        render();
+      } else {
+        openEditor(m, act === "score" ? "score" : null);
+      }
+    }
+    $("#fixtures").addEventListener("click", onListClick);
+    $("#results").addEventListener("click", onListClick);
+    document.querySelectorAll("[data-add]").forEach(function (b) {
+      b.addEventListener("click", function () { openEditor(null, b.getAttribute("data-add")); });
+    });
+
+    /* ---------- editor ---------- */
+    var dlg = $("#editor"), form = $("#edForm"), F = form.elements;
+    var draftPoster = "";
+
+    function setPosterPreview() {
+      var box = $("#posterImg");
+      var url = draftPoster ? (posters[draftPoster] ? posters[draftPoster].url : asset(draftPoster)) : "";
+      box.style.backgroundImage = url ? "url(\"" + url + "\")" : "";
+      box.textContent = url ? "" : "No poster";
+      $("#posterRemove").hidden = !draftPoster;
+    }
+    function syncTbc() {
+      var tbc = F.tbc.checked;
+      F.date.disabled = tbc;
+      form.querySelector("[data-season]").hidden = !tbc;
+      if (tbc && !F.season.value) F.season.value = (F.date.value || "").slice(0, 4) || today().getFullYear();
+    }
+    function syncOpp() { form.querySelector("[data-opp-label]").textContent = F.opponent.value.trim() || "Opponent"; }
+
+    function openEditor(m, focus) {
+      editing = m;
+      form.reset();
+      $("#edErr").hidden = true;
+      var title = m ? (focus === "score" ? "Add score" : "Edit match") : focus === "result" ? "Add result" : "Add fixture";
+      $("#edTitle").textContent = title;
+      if (m) {
+        F.opponent.value = m.opponent || "";
+        form.querySelector('input[name=venue][value="' + (m.venue || "home") + '"]').checked = true;
+        F.comp.value = m.comp || "League";
+        F.date.value = m.date || "";
+        F.tbc.checked = !m.date;
+        F.season.value = m.season || "";
+        F.ko.value = m.ko || "";
+        F.ground.value = m.ground || "";
+        F.us.value = isNum(m.us) ? m.us : "";
+        F.them.value = isNum(m.them) ? m.them : "";
+        F.scorers.value = m.scorers || "";
+        draftPoster = m.poster || "";
+      } else {
+        F.comp.value = "League";
+        F.ground.value = HOME_GROUND;
+        draftPoster = "";
+      }
+      syncTbc(); syncOpp(); setPosterPreview();
+      dlg.showModal();
+      var target = focus === "score" ? F.us : F.opponent;
+      setTimeout(function () { target.focus(); if (focus === "score") target.scrollIntoView({ block: "center" }); }, 30);
+    }
+
+    form.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", function () { dlg.close(); }); });
+    F.tbc.addEventListener("change", syncTbc);
+    F.opponent.addEventListener("input", syncOpp);
+    form.querySelectorAll("input[name=venue]").forEach(function (r) {
+      r.addEventListener("change", function () {
+        if (r.checked && r.value === "home" && !F.ground.value) F.ground.value = HOME_GROUND;
+        if (r.checked && r.value !== "home" && F.ground.value === HOME_GROUND) F.ground.value = "";
+      });
+    });
+
+    $("#posterRemove").addEventListener("click", function () { draftPoster = ""; setPosterPreview(); });
+    $("#posterFile").addEventListener("change", function () {
+      var file = this.files && this.files[0];
+      this.value = "";
+      if (!file) return;
+      if (mode !== "github") { toast("Connect to GitHub to upload posters.", true); return; }
+      shrink(file).then(function (out) {
+        var name = "assets/img/posters/" + (F.date.value || F.season.value || today().getFullYear()) + "-" + slug(F.opponent.value || "match") + "-" + Date.now().toString(36) + ".jpg";
+        posters[name] = out;
+        draftPoster = name;
+        setPosterPreview();
+      }).catch(function () { toast("That image couldn't be read. Try a JPG or PNG.", true); });
+    });
+    function shrink(file) {
+      return new Promise(function (res, rej) {
+        var img = new Image();
+        var src = URL.createObjectURL(file);
+        img.onload = function () {
+          var max = 1600, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+          var c = document.createElement("canvas");
+          c.width = Math.round(w * k); c.height = Math.round(h * k);
+          var ctx = c.getContext("2d");
+          ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(src);
+          var url = c.toDataURL("image/jpeg", 0.85);
+          res({ url: url, b64: url.split(",")[1] });
+        };
+        img.onerror = function () { URL.revokeObjectURL(src); rej(); };
+        img.src = src;
+      });
+    }
+
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var err = function (msg, el) { var e = $("#edErr"); e.textContent = msg; e.hidden = false; if (el) el.focus(); };
+      var opponent = F.opponent.value.trim();
+      if (!opponent) return err("Add the opponent's name.", F.opponent);
+      var tbc = F.tbc.checked;
+      var date = tbc ? "" : F.date.value;
+      if (!tbc && !date) return err("Pick a date, or tick “Date not confirmed yet”.", F.date);
+      var season = tbc ? String(F.season.value || "").trim() : date.slice(0, 4);
+      if (!/^\d{4}$/.test(season)) return err("Add the season year, e.g. " + today().getFullYear() + ".", F.season);
+      var us = F.us.value === "" ? null : parseInt(F.us.value, 10);
+      var them = F.them.value === "" ? null : parseInt(F.them.value, 10);
+      if ((us === null) !== (them === null)) return err("Fill in both scores, or leave both empty.", us === null ? F.us : F.them);
+      if ((us !== null && (us < 0 || isNaN(us))) || (them !== null && (them < 0 || isNaN(them)))) return err("Scores must be 0 or more.", F.us);
+
+      var m = editing || {};
+      var before = editing ? label(editing) : null;
+      var wasResult = editing && isResult(editing);
+      var oldPoster = m.poster || "";
+      m.date = date;
+      m.season = season;
+      m.comp = F.comp.value.trim() || "League";
+      m.venue = form.querySelector("input[name=venue]:checked").value;
+      m.opponent = opponent;
+      m.us = us;
+      m.them = them;
+      m.scorers = us === null ? "" : F.scorers.value.trim();
+      m.ground = F.ground.value.trim();
+      m.ko = F.ko.value;
+      m.poster = draftPoster;
+      if (oldPoster && oldPoster !== draftPoster && posters[oldPoster]) delete posters[oldPoster];
+
+      if (!editing) {
+        var base = (date || season) + "-" + slug(opponent), id = base, n = 2;
+        while (data.matches.some(function (x) { return x.id === id; })) id = base + "-" + n++;
+        m = { id: id, date: m.date, season: m.season, comp: m.comp, venue: m.venue, opponent: m.opponent, us: m.us, them: m.them, scorers: m.scorers, ground: m.ground, ko: m.ko, poster: m.poster };
+        data.matches.push(m);
+        changes.push((isResult(m) ? "Result: " : "New fixture: ") + label(m));
+      } else if (!wasResult && isResult(m)) {
+        changes.push("Result: " + label(m));
+      } else {
+        changes.push("Updated " + (before !== label(m) ? before + " → " : "") + label(m));
+      }
+      dlg.close();
+      render();
+    });
+
+    /* ---------- publish ---------- */
+    $("#discard").addEventListener("click", function () {
+      if (!confirm("Undo every change since you last published?")) return;
+      data = JSON.parse(saved); changes = []; posters = {};
+      render();
+    });
+    $("#publish").addEventListener("click", function () {
+      if (mode !== "github") { $("#download").click(); return; }
+      var btn = this;
+      btn.disabled = true; btn.textContent = "Publishing…";
+      data.updated = new Date().toISOString();
+      var msg = changes.length ? changes[changes.length - 1] + (changes.length > 1 ? " (+" + (changes.length - 1) + " more)" : "") : "Update matches";
+      var used = {};
+      data.matches.forEach(function (m) { if (m.poster) used[m.poster] = 1; });
+      var uploads = Object.keys(posters).filter(function (p) { return used[p]; });
+      var chain = Promise.resolve();
+      uploads.forEach(function (p) {
+        chain = chain.then(function () {
+          return gh(p, { method: "PUT", body: { message: "Poster for " + msg, content: posters[p].b64, branch: BRANCH } });
+        }).then(function () { delete posters[p]; });
+      });
+      chain.then(function () {
+        var body = { message: "Match centre: " + msg + "\n\n" + changes.map(function (c) { return "- " + c; }).join("\n"), content: b64encUtf8(json()), branch: BRANCH };
+        if (sha) body.sha = sha;
+        return gh(FILE, { method: "PUT", body: body });
+      }).then(function (r) {
+        sha = r.content && r.content.sha;
+        saved = json(); changes = []; posters = {};
+        render();
+        toast("Published. The website updates in about a minute.", false, 6000);
+      }).catch(function (e) {
+        toast(explain(e), true, 8000);
+      }).then(function () {
+        btn.disabled = false; updateBar();
+      });
+    });
+
+    window.addEventListener("beforeunload", function (ev) {
+      if (dirty()) { ev.preventDefault(); ev.returnValue = ""; }
+    });
+
+    start();
+  })();
+  </script>
+</body>
+</html>

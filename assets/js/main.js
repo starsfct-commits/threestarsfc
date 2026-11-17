@@ -38,6 +38,13 @@
   if (menu) $$("a", menu).forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && menu && menu.classList.contains("is-open")) setMenu(false); });
 
+  /* Everything below runs once match data (assets/js/matches.js) has rendered,
+     so freshly built rows get the same animations and lightbox as static ones. */
+  var booted = false;
+  function boot() {
+  if (booted) return;
+  booted = true;
+
   /* ---------- split headings into words ---------- */
   $$("[data-split]").forEach(function (el) {
     var i = 0;
@@ -299,4 +306,10 @@
       if (lenis) lenis.resize();
     });
   });
+  }
+
+  var ready = window.tsfcReady;
+  if (ready && typeof ready.then === "function") ready.then(boot, boot);
+  else boot();
+  setTimeout(boot, 3000);
 })();
